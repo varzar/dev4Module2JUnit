@@ -30,6 +30,11 @@ class ActionListTest {
     private final ActionList actionList = new ActionList(actionMap);
 
     @Mock
+    // actually we don't mock here anything
+    //you should mock those two objects
+    // InMemoryStorage storageWithoutAction
+    // and
+    // InMemoryStorage storageWithAction
     private ActionList actionList2;
 
     @Test

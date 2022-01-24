@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public class StorageWithAction {
     private  InMemoryStorage storage= new InMemoryStorage();
+
     public InMemoryStorage createStorage(){
         Item A = new Item("A", BigDecimal.valueOf(1));
         Item B = new Item("B", BigDecimal.valueOf(4.25));
