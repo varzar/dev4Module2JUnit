@@ -12,13 +12,16 @@ import java.util.List;
 import java.util.Map;
 
 public class ActionList {
-    InMemoryStorage storageWithoutAction = new StorageWithoutAction().createStorage();
-    InMemoryStorage storageWithAction = new StorageWithAction().createStorage();
+    private final InMemoryStorage storageWithoutAction = new StorageWithoutAction().createStorage();
+    private final InMemoryStorage storageWithAction = new StorageWithAction().createStorage();
     HashMap<String, Integer> actionMap;
 
     public ActionList(HashMap<String, Integer> actionMap) {
         this.actionMap = actionMap;
     }
+
+    public InMemoryStorage getStorageWithoutAction(){ return storageWithoutAction;}
+    public InMemoryStorage getStorageWithAction(){return storageWithAction;}
 
     public BigDecimal calculateTotalCost(String shoppingList) {
         if(shoppingList == null){
@@ -39,18 +42,18 @@ public class ActionList {
         int count = 0;
 
         for (Map.Entry<String, BigDecimal> entry : storageWithoutAction.getItemsMap().entrySet()) {
-                if(count < size && entry.getKey().equals(nameItems.get(count))) {
-                    amountItemsInCart = getCounter(shoppingList, nameItems.get(count));
-                    result = result
-                            .add(getItemSum(entry.getValue(), costAction.get(count),
-                                    amountItems.get(count), amountItemsInCart));
-                    count++;
-                }else{
-                    int amount = (getCounter(shoppingList, entry.getKey()));
-                    result = result.add(entry.getValue()
-                                    .multiply(new BigDecimal(amount)))
-                            .setScale(2, RoundingMode.HALF_EVEN);
-                }
+            if(count < size && entry.getKey().equals(nameItems.get(count))) {
+                amountItemsInCart = getCounter(shoppingList, nameItems.get(count));
+                result = result
+                        .add(getItemSum(entry.getValue(), costAction.get(count),
+                                amountItems.get(count), amountItemsInCart));
+                count++;
+            }else{
+                int amount = (getCounter(shoppingList, entry.getKey()));
+                result = result.add(entry.getValue()
+                                .multiply(new BigDecimal(amount)))
+                        .setScale(2, RoundingMode.HALF_EVEN);
+            }
         }
         return result;
     }
@@ -82,3 +85,4 @@ public class ActionList {
     }
 
 }
+

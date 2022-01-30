@@ -10,10 +10,12 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ua.goit.dataPrice.InMemoryStorage;
+import ua.goit.dataPrice.StorageWithAction;
+import ua.goit.dataPrice.StorageWithoutAction;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +28,13 @@ class ActionListTest {
         put("A", 3);
         put("C", 6);
     }};
+
+    @Mock
+    InMemoryStorage storageWithoutAction = new InMemoryStorage();
+
+    @Mock
+    InMemoryStorage storageWithAction = new InMemoryStorage();
+
 
     private final ActionList actionList = new ActionList(actionMap);
 
@@ -40,13 +49,13 @@ class ActionListTest {
     @Test
     void testCalculateTotalCostValueNullReturnThrowException() {
         String argument = null;
-        assertThrows(IllegalArgumentException.class, () -> actionList.calculateTotalCost(argument));
+        assertThrows(IllegalArgumentException.class, () -> actionList.calculateTotalCost(null));
     }
 
     @ParameterizedTest(name = "#{index} - Run test with args={0} expected={1}")
     @MethodSource("dataProvider")
     void testCalculateTotalCostShouldReturnValuesWithAction(String input,
-                                                  BigDecimal expected) {
+                                                            BigDecimal expected) {
         BigDecimal result = actionList.calculateTotalCost(input);
         assertEquals(expected, result);
     }
@@ -83,5 +92,42 @@ class ActionListTest {
         boolean result = Objects.equals(output, new BigDecimal("7.25"));
         assertTrue(result);
         assertEquals(new BigDecimal("7.25"), output);
+    }
+
+    @Test
+    void testStorageWithoutActionsShouldReturnTrue(){
+        boolean flag = true;
+        boolean itemA = false;
+        storageWithoutAction = new StorageWithoutAction().createStorage();
+        HashMap<String, BigDecimal> realMap = actionList.getStorageWithoutAction().getItemsMap();
+        HashMap<String, BigDecimal> testMap = storageWithoutAction.getItemsMap();
+        for (Map.Entry<String, BigDecimal> entry: testMap.entrySet()) {
+            if(storageWithoutAction.get(entry.getKey()).equals(BigDecimal.valueOf(1.25))){
+                itemA = true;
+            }
+        }
+
+        if (realMap.size() != testMap.size()){
+            flag = false;
+        }
+        assertTrue(flag && realMap.equals(testMap) && itemA);
+    }
+
+    @Test
+    void testStorageWithActionShouldReturnTrue(){
+        boolean flag = true;
+        boolean itemA = false;
+        storageWithAction = new StorageWithAction().createStorage();
+        HashMap<String, BigDecimal> realMap = actionList.getStorageWithAction().getItemsMap();
+        HashMap<String, BigDecimal> testMap = storageWithAction.getItemsMap();
+        for (Map.Entry<String, BigDecimal> entry: testMap.entrySet()) {
+            if(storageWithAction.get(entry.getKey()).equals(BigDecimal.valueOf(1))){
+                itemA = true;
+            }
+        }
+        if (realMap.size() != testMap.size()){
+            flag = false;
+        }
+        assertTrue(flag && realMap.equals(testMap) && itemA);
     }
 }

@@ -13,29 +13,10 @@ public class InMemoryStorage {
         return itemsMap.get(name);
     }
 
-    public BigDecimal getValue(int index){
-        return itemsMap.get(index);
-    }
-
-    public BigDecimal remove(String name){
-        return itemsMap.remove(name);
-    }
-
-    public int size(){
-        return itemsMap.size();
-    }
-
     public HashMap<String, BigDecimal> getItemsMap(){
         return itemsMap;
     }
 
-    public void clear(){
-        itemsMap.clear();
-    }
-
     //please commented and unused code
 
-//    public String keySet() {
-//        itemsMap.keySet();
-//    }
 }
