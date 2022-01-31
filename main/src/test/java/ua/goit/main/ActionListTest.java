@@ -29,6 +29,10 @@ class ActionListTest {
         put("C", 6);
     }};
 
+    /*again we shouldn't create the object with "new" keyword
+    we need a mock object in construction when(storageWithoutAction.get("A").thenReturn(data what you need)
+    maybe you have to refactor your application to write more simple test
+     */
     @Mock
     InMemoryStorage storageWithoutAction = new InMemoryStorage();
 
@@ -48,6 +52,7 @@ class ActionListTest {
 
     @Test
     void testCalculateTotalCostValueNullReturnThrowException() {
+        //why do we need the variable?
         String argument = null;
         assertThrows(IllegalArgumentException.class, () -> actionList.calculateTotalCost(null));
     }
@@ -87,6 +92,7 @@ class ActionListTest {
 
     @Test
     void testCalculateTotalCostShouldReturnTrue(){
+        // why do we need actionList2 in generally? what the difference with actionList?
         actionList2 = new ActionList(actionMap);
         BigDecimal output = actionList2.calculateTotalCost(" ABCD");
         boolean result = Objects.equals(output, new BigDecimal("7.25"));
